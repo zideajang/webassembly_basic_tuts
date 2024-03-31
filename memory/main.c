@@ -14,3 +14,7 @@ int accumulate(int *arr, int n)
 }
 
 EMSCRIPTEN_KEEPALIVE
+const char* getString()
+{
+    return "Hello wasm!";
+}

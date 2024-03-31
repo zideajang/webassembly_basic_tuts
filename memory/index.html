@@ -41,6 +41,17 @@
             
            
         }
+
+        function get_string(){
+            var ptr = exports.getString();
+            var bytes = new Uint8Array(memory.buffer,ptr);
+            var strlen = 0;
+            while(bytes[strlen]!=0) strlen++;
+            var str = new TextDecoder("utf8").decode(bytes.slice(0,strlen));
+            console.log(str);
+            navigator.clipboard.writeText(str);
+        
+        }
     </script>
     <div class="container p-3">
         <div class="content">
@@ -50,7 +61,10 @@
             <div id="output" class="box">
                 
             </div>
-            <button class="button is-primary" onclick="run_wasm()">Trigger</button>
+            <div class="buttons">
+                <button class="button is-primary" onclick="run_wasm()">Trigger</button>
+                <button class="button is-default" onclick="get_string()">Copy string</button>
+            </div>
         </div>
     </div>
 
