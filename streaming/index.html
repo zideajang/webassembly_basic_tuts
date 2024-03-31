@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
+        >
+    <script src="demo.js"></script>
+</head>
+<body>
+    <p class="title">Streaming Demo</p>
+    <script>
+        var exports
+        WebAssembly.instantiateStreaming(
+            fetch("demo.wasm"),{}
+        ).then(results=>exports=results.instance.exports);
+
+        function run_wasm(){
+            
+            var num1 = document.querySelector("#num1").value;
+            var sum = exports.sumOfNInts(num1);
+            document.querySelector("#output").innerHTML = sum;
+           
+        }
+    </script>
+    <div class="container">
+        <div class="field">
+            <input type="number" class="input" id="num1"/>
+        </div>
+        <div id="output" class="box">
+            
+        </div>
+        <button class="button is-primary" onclick="run_wasm()">Trigger</button>
+    </div>
+
+</body>
+</html>

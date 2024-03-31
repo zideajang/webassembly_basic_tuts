@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
+        >
+</head>
+<body>
+    <p class="title">Streaming Demo</p>
+    <script>
+        var memory = new WebAssembly.Memory({
+            initial:256,
+            maximum:512
+        });
+
+        var exports
+        WebAssembly.instantiateStreaming(
+            fetch("main.wasm"),{
+                js:{
+                    mem:memory
+                }
+            }
+        ).then(results=>{
+            exports=results.instance.exports;
+            memory = results.instance.exports.memory;
+        });
+
+        function run_wasm(){
+            var arr = new Uint32Array(memory.buffer);
+            for (let i = 0; i < 10; i++) {
+                arr[i] = i * 2;
+            }
+
+            var sum = exports.accumulate(0,10);
+
+            document.querySelector("#output").innerHTML = sum;
+            
+           
+        }
+    </script>
+    <div class="container p-3">
+        <div class="content">
+            <div class="field">
+                <input type="number" class="input" id="num1"/>
+            </div>
+            <div id="output" class="box">
+                
+            </div>
+            <button class="button is-primary" onclick="run_wasm()">Trigger</button>
+        </div>
+    </div>
+
+</body>
+</html>
